@@ -2,9 +2,215 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>IPL PREDICTION</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPL Winning Team Prediction</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f0f4f8, #e6eaf0);
+            color: #333;
+            text-align: center;
+            overflow-x: hidden;
+        }
+        header {
+            background: #004d99;
+            color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-transform: uppercase;
+        }
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(-30deg);
+            animation: spin 30s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(-30deg); }
+            to { transform: rotate(330deg); }
+        }
+        main {
+            padding: 40px;
+            position: relative;
+            z-index: 1;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin-top: 20px;
+            background: #00c853;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            transition: background 0.3s, transform 0.3s;
+            transform: scale(1);
+        }
+        .btn:hover {
+            background: #00b248;
+            transform: scale(1.05);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-content {
+            background: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.5s;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: #333;
+        }
+        form label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+        form input, form select {
+            width: calc(100% - 22px);
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+        form button {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            background: #00c853;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background 0.3s;
+        }
+        form button:hover {
+            background: #00b248;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>IPL Winning Team Prediction</h1>
+    </header>
+    <main>
+        <p>Predict the winning team of the IPL match based on various factors.</p>
+        <a href="#" class="btn" id="predictBtn">Predict</a>
+    </main>
+    <div id="predictionModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>Enter Match Details</h2>
+            <form action="{% url 'predict' %}" method="post">
+                {% csrf_token %}
+                <label for="batting_team">Batting Team:</label>
+                <select name="batting_team" id="batting_team" required>
+                    <option value="Mumbai Indians">Mumbai Indians</option>
+                    <option value="Chennai Super Kings">Chennai Super Kings</option>
+                    <option value="Royal Challengers Bangalore">Royal Challengers Bangalore</option>
+                    <option value="Kolkata Knight Riders">Kolkata Knight Riders</option>
+                    <option value="Sunrisers Hyderabad">Sunrisers Hyderabad</option>
+                    <option value="Delhi Capitals">Delhi Capitals</option>
+                    <option value="Rajasthan Royals">Rajasthan Royals</option>
+                    <option value="Kings XI Punjab">Kings XI Punjab</option>
+                </select>
 
+                <label for="bowling_team">Bowling Team:</label>
+                <select name="bowling_team" id="bowling_team" required>
+                    <option value="Mumbai Indians">Mumbai Indians</option>
+                    <option value="Chennai Super Kings">Chennai Super Kings</option>
+                    <option value="Royal Challengers Bangalore">Royal Challengers Bangalore</option>
+                    <option value="Kolkata Knight Riders">Kolkata Knight Riders</option>
+                    <option value="Sunrisers Hyderabad">Sunrisers Hyderabad</option>
+                    <option value="Delhi Capitals">Delhi Capitals</option>
+                    <option value="Rajasthan Royals">Rajasthan Royals</option>
+                    <option value="Kings XI Punjab">Kings XI Punjab</option>
+                </select>
+
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" required>
+
+                <label for="runs_left">Runs Left:</label>
+                <input type="number" id="runs_left" name="runs_left" required>
+
+                <label for="balls_left">Balls Left:</label>
+                <input type="number" id="balls_left" name="balls_left" required>
+
+                <label for="wickets_remaining">Wickets Remaining:</label>
+                <input type="number" id="wickets_remaining" name="wickets_remaining" required>
+
+                <label for="total_runs_x">Total Runs:</label>
+                <input type="number" id="total_runs_x" name="total_runs_x" required>
+
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        var modal = document.getElementById("predictionModal");
+        var btn = document.getElementById("predictBtn");
+        var span = document.getElementById("closeModal");
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
