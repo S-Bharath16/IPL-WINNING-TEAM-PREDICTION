@@ -2,7 +2,7 @@ IPL Winning Team Prediction
 Welcome to the IPL Winning Team Prediction project! 🎉
 
 Overview
-This project aims to predict the winning team of an Indian Premier League (IPL) cricket match based on various factors. The application allows users to input match details and receive predictions using machine learning algorithms(Rainforest Algorithm). Whether you're a cricket enthusiast or a data science aficionado, this project offers a blend of sports and technology.
+This project aims to predict the winning team of an Indian Premier League (IPL) cricket match based on various factors. The application allows users to input match details and receive predictions using machine learning algorithms(RandomForest Algorithm). Whether you're a cricket enthusiast or a data science aficionado, this project offers a blend of sports and technology.
 
 Features
 User-Friendly Interface: A sleek, responsive web interface where users can easily input match details.
