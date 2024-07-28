@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IPL Winning Team Prediction</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -14,7 +16,17 @@
             color: #333;
             text-align: center;
             overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background 0.5s, color 0.5s;
         }
+
+        body.night {
+            background: linear-gradient(135deg, #1c1c1c, #3a3a3a);
+            color: #f0f0f0;
+        }
+
         header {
             background: #004d99;
             color: white;
@@ -24,31 +36,20 @@
             z-index: 1;
             overflow: hidden;
         }
+
         header h1 {
             margin: 0;
             font-size: 2.5em;
             text-transform: uppercase;
         }
-        header::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 300%;
-            height: 300%;
-            background: rgba(255, 255, 255, 0.1);
-            transform: rotate(-30deg);
-            animation: spin 30s linear infinite;
-        }
-        @keyframes spin {
-            from { transform: rotate(-30deg); }
-            to { transform: rotate(330deg); }
-        }
+
         main {
             padding: 40px;
             position: relative;
             z-index: 1;
+            flex: 1;
         }
+
         .btn {
             display: inline-block;
             padding: 12px 25px;
@@ -61,10 +62,12 @@
             transition: background 0.3s, transform 0.3s;
             transform: scale(1);
         }
+
         .btn:hover {
             background: #00b248;
             transform: scale(1.05);
         }
+
         .modal {
             display: none;
             position: fixed;
@@ -77,10 +80,17 @@
             background: rgba(0, 0, 0, 0.6);
             animation: fadeIn 0.5s;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
+
         .modal-content {
             background: #fff;
             margin: 15% auto;
@@ -91,10 +101,19 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             animation: slideIn 0.5s;
         }
+
         @keyframes slideIn {
-            from { transform: translateY(-30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
+
         .close {
             color: #aaa;
             float: right;
@@ -102,22 +121,35 @@
             font-weight: bold;
             cursor: pointer;
         }
+
         .close:hover {
             color: #333;
         }
+
         form label {
             display: block;
             margin-top: 15px;
             font-weight: 600;
         }
-        form input, form select {
+
+        form input,
+        form select {
             width: calc(100% - 22px);
             padding: 12px;
             margin-top: 5px;
             border: 1px solid #ccc;
             border-radius: 8px;
             font-size: 1em;
+            background: #fff;
+            color: #333;
         }
+
+        form input:focus,
+        form select:focus {
+            border-color: #00c853;
+            outline: none;
+        }
+
         form button {
             display: block;
             width: 100%;
@@ -131,11 +163,81 @@
             font-size: 1.1em;
             transition: background 0.3s;
         }
+
         form button:hover {
             background: #00b248;
         }
+
+        body.night form input,
+        body.night form select {
+            background: #333;
+            color: #f0f0f0;
+            border-color: #444;
+        }
+
+        body.night form button {
+            background: #444;
+            color: #f0f0f0;
+        }
+
+        body.night form button:hover {
+            background: #555;
+        }
+
+        /* Ensure labels are visible in night mode */
+        body.night form label {
+            color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        body.night h2 {
+            color: #f0f0f0;
+        }
+
+        footer {
+            background: #004d99;
+            color: white;
+            padding: 20px;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        footer a {
+            color: #ffffff;
+            font-size: 1.5em;
+            text-decoration: none;
+        }
+
+        #dayNightToggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ffffff;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+            z-index: 1000; /* Ensure it is on top of other elements */
+            font-size: 1.5em;
+        }
+
+        #dayNightToggle.night {
+            background: #333333;
+            color: #ffffff;
+        }
     </style>
 </head>
+
 <body>
     <header>
         <h1>IPL Winning Team Prediction</h1>
@@ -193,24 +295,46 @@
             </form>
         </div>
     </div>
+    <footer>
+        <a href="https://www.instagram.com/bharath_.16._?igsh=cTMxcXN1NjFxcDg5" target="_blank" aria-label="Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://github.com/S-Bharath16" target="_blank" aria-label="GitHub">
+            <i class="fab fa-github"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/bharathssss/" target="_blank" aria-label="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+        </a>
+    </footer>
+    <button id="dayNightToggle">🌞</button>
     <script>
         var modal = document.getElementById("predictionModal");
         var btn = document.getElementById("predictBtn");
         var span = document.getElementById("closeModal");
 
-        btn.onclick = function() {
+        btn.onclick = function () {
             modal.style.display = "block";
         }
 
-        span.onclick = function() {
+        span.onclick = function () {
             modal.style.display = "none";
         }
 
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";
             }
         }
+
+        // Day/Night Mode Toggle
+        const toggleButton = document.getElementById('dayNightToggle');
+        const body = document.body;
+
+        toggleButton.addEventListener('click', () => {
+            body.classList.toggle('night');
+            toggleButton.textContent = body.classList.contains('night') ? '🌜' : '🌞';
+        });
     </script>
 </body>
+
 </html>
